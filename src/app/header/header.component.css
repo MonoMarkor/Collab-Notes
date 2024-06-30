@@ -1,0 +1,26 @@
+mat-toolbar {
+  justify-content: space-between;
+  padding: 0 2rem;
+  color: var(--nav);
+  background-color: var(--navback);
+
+  .control {
+    display: flex;
+    align-items: center;
+    justify-content: center;;
+  }
+
+  .add{
+    margin-right: 10px;
+  }
+
+  app-auth-button{
+    margin-left: 10px;
+  }
+
+  mat-icon{
+    color: var(--nav);
+  }
+
+
+}

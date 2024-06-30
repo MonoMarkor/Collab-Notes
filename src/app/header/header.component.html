@@ -1,0 +1,27 @@
+<mat-toolbar>
+
+    <span>Collaborative Notes</span>
+
+   
+
+    <div class="control">
+
+        <button a [routerLink]="['/editor']" mat-icon-button class="add" >
+            <mat-icon>add</mat-icon>
+        </button>
+
+        <mat-slide-toggle color="primary" (click)="toggleTheme()"></mat-slide-toggle>
+        <button mat-icon-button [disabled]="true">
+            @if (isDarmode()){
+                <mat-icon>bedtime</mat-icon>
+            } @else {
+                <mat-icon>brightness_5</mat-icon>
+            }
+        </button>
+        
+        <app-auth-button></app-auth-button>
+    </div>
+
+    
+
+</mat-toolbar>

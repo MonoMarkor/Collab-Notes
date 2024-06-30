@@ -1,0 +1,11 @@
+<div class="popup">
+    <h2>Share this link</h2>
+    <input
+      type="text"
+      [value]="currentUrl"
+      readonly
+      #urlInput
+    />
+    <button (click)="copyLink(urlInput)">Copy Link</button>
+    <button (click)="close()">Close</button>
+  </div>

@@ -1,0 +1,31 @@
+* {
+  margin: 0px;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+
+
+.accountForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.accountForm mat-form-field {
+  width: 100%;
+}
+
+.accountForm div {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.accountForm button {
+  width: 100%;
+}

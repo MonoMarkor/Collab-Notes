@@ -1,0 +1,59 @@
+
+
+<body>
+  <!--<app-nav-editor></app-nav-editor>-->
+  <!--<app-nav-editor2></app-nav-editor2>-->
+
+      <app-slide 
+        (downloadFile)="onDownload()"
+        (uploadFile)="uploadFile()"
+        (openFile)="showOpenPanel()"
+        (save)="saveFile()"
+        (share)="showSharePopup()"
+        (help)="showInfoPopup()">
+      </app-slide>
+
+
+        <div class="main">
+          <div class="main-container">
+            <div class="header">
+              <input
+                type="text"
+                class="txtHeader"
+                id="txtHeader"
+                placeholder="Enter title here"
+                (keyup)="activityTrue()"
+                (keyup)="saveFile()"
+              />
+              &nbsp;
+            </div>
+
+            <div class="content">
+              <textarea class="txtContent" id="txtContent" (keyup)="activityTrue()"
+              ></textarea>
+            </div>
+            <br><br>
+
+        </div>
+
+      </div>
+
+<input type="file" id="fileInput" (change)="onFileSelected($event)" hidden />
+<!--<button (click)="uploadFile()">Upload File</button>-->
+
+<div class="overlay" *ngIf="openPanel" (click)="closePopup($event)">
+  <app-open (click)="$event.stopPropagation()" ></app-open>
+</div>
+  
+<div class="overlay2" *ngIf="isSharePopupVisible" (click)="closeSharePopup()">
+  <app-share (click)="$event.stopPropagation()"
+  (closeShare)="closeSharePopup()"></app-share>
+</div>
+
+<div class="overlay2" *ngIf="isInfoPopupVisible" (click)="closeInfoPopup()">
+  <app-info (click)="$event.stopPropagation()"></app-info>
+</div>
+      
+ 
+  </body>
+

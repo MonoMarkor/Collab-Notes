@@ -1,0 +1,12 @@
+
+<a class="link" [routerLink]="['/editor', filesLocation.id]">
+    <section class="listing">
+        <h2 class="file-heading">
+            {{filesLocation.fileTitle | maxLen}}
+        </h2>
+        
+        <h5 class="file-date">{{filesLocation.updatedAt | dateFormat1}}</h5>
+    </section>
+    </a>
+
+
