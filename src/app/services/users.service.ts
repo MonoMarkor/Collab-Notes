@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Users } from './users';
-import { of } from 'rxjs';
+import { User } from './user_model';
+import { CurrentUser } from './current-user';
+
 
 @Injectable({
   providedIn: 'root',
@@ -8,12 +9,42 @@ import { of } from 'rxjs';
 export class UsersService {
   constructor() {}
 
-  usersList: Users[] = [
-    { username: 'Angular', password: 'Angular', group: ['A', 'B'], files: [] },
-    { username: 'Backend', password: 'Backend', group: ['A', 'B'], files: [] },
-    { username: 'Client', password: 'Client', group: ['A'], files: [] },
-    { username: 'Dekstop', password: 'Dekstop', group: ['B'], files: [] },
-    { username: 'Express', password: 'Express', group: ['C'], files: [] },
+  usersList: User[] = [
+    {
+      user_id: '1',
+      username: 'Angular',
+      password: 'Angular',
+      local_file_ids: [],
+      group_ids: ['A', 'B'],
+    },
+    {
+      user_id: '1',
+      username: 'Backend',
+      password: 'Backend',
+      group_ids: ['A', 'B'],
+      local_file_ids: [],
+    },
+    {
+      user_id: '1',
+      username: 'Client',
+      password: 'Client',
+      group_ids: ['A'],
+      local_file_ids: [],
+    },
+    {
+      user_id: '1',
+      username: 'Dekstop',
+      password: 'Dekstop',
+      group_ids: ['B'],
+      local_file_ids: [],
+    },
+    {
+      user_id: '1',
+      username: 'Express',
+      password: 'Express',
+      group_ids: ['C'],
+      local_file_ids: [],
+    },
   ];
 
   checkCredentials(username: string, password: string): boolean {
@@ -27,59 +58,65 @@ export class UsersService {
   }
 
   addUser(username: string, password: string): void {
-    const newUser: Users = { username, password, group: [], files: [] };
+    const newUser: User = {
+      username,
+      password,
+      group_ids: [],
+      local_file_ids: [],
+      user_id: '45',
+    };
     this.usersList.push(newUser);
   }
 
   isUsernameTaken(username: string): boolean {
     return this.usersList.some((user) => user.username === username);
-    /*const isTaken = this.usersList.some(
-          (user) => user.username === username
-        );
-        return of(isTaken);*/
   }
 
-  getAllUsernames(): string[] {
-    return this.usersList.map((user) => user.username);
+
+  //CurrentUser Implementation
+  private localStoragekey: string = 'username';
+  private defaultUser: string = 'LocalUser@12345#+*%';
+   isLoggedIn: boolean = false;
+
+  currentUser: CurrentUser = {
+    username: this.defaultUser,
+    group_ids: [],
+    local_file_ids: [],
+  };
+
+  notLoggedIn(): void {
+    this.currentUser = {
+      username: this.defaultUser,
+      group_ids: [],
+      local_file_ids: [],
+    };
   }
 
-  /* password generater
-  generateRandomPassword(): string {
-    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
-    const digits = '0123456789';
-    const specialChars = '!@#$%^&*()_+[]{}|;:,.<>?';
+  logout(): void {
+    localStorage.setItem(this.localStoragekey, this.defaultUser);
+    this.notLoggedIn();
+    this.isLoggedIn = false;
+  }
 
-    const allChars = uppercaseChars + lowercaseChars + digits + specialChars;
-    const passwordLength = 8;
-
-    let password = '';
-    
-    // Ensure at least one character of each type is included
-    password += uppercaseChars[Math.floor(Math.random() * uppercaseChars.length)];
-    password += lowercaseChars[Math.floor(Math.random() * lowercaseChars.length)];
-    password += digits[Math.floor(Math.random() * digits.length)];
-    password += specialChars[Math.floor(Math.random() * specialChars.length)];
-
-    // Fill the remaining length with random characters from all sets
-    for (let i = 4; i < passwordLength; i++) {
-      password += allChars[Math.floor(Math.random() * allChars.length)];
+  userLogin(username: string): void {
+    if (username == this.defaultUser) {
+      this.currentUser.username = username;
+      this.currentUser.group_ids = [];
+      this.isLoggedIn = false;
+    } else {
+      this.currentUser.username = username;
+      //add function to add groups to current user
+      //add function to add filesId to current user
+      this.isLoggedIn = true;
+      localStorage.setItem(this.localStoragekey, username);
     }
 
-    // Shuffle the password to ensure random order
-    password = this.shuffleString(password);
-
-    return password;
+    console.log(
+      this.currentUser.username +
+        ' has logged in with groups: ' +
+        this.currentUser.group_ids +
+        '  ,user logged in: ' +
+        this.isLoggedIn
+    );
   }
-
-  private shuffleString(str: string): string {
-    const array = str.split('');
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array.join('');
-  }
-  
-  */
 }

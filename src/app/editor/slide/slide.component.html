@@ -1,85 +1,55 @@
-<label >
-        <!--<input class="input-toggle" type="checkbox">
-        <div class="toggle">
-          <span class="top_line common"></span>
-          <span class="middle_line common"></span>
-          <span class="bottom_line common"></span>
-        </div> -->
-    <div class="slide">
-      <ul>
-        <li id="save" (click)="saveBtn()"> 
-          <a>
-            <svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill=currentColor><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>save-floppy</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="currentColor" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-152.000000, -515.000000)" fill="currentColor"> <path d="M171,525 C171.552,525 172,524.553 172,524 L172,520 C172,519.447 171.552,519 171,519 C170.448,519 170,519.447 170,520 L170,524 C170,524.553 170.448,525 171,525 L171,525 Z M182,543 C182,544.104 181.104,545 180,545 L156,545 C154.896,545 154,544.104 154,543 L154,519 C154,517.896 154.896,517 156,517 L158,517 L158,527 C158,528.104 158.896,529 160,529 L176,529 C177.104,529 178,528.104 178,527 L178,517 L180,517 C181.104,517 182,517.896 182,519 L182,543 L182,543 Z M160,517 L176,517 L176,526 C176,526.553 175.552,527 175,527 L161,527 C160.448,527 160,526.553 160,526 L160,517 L160,517 Z M180,515 L156,515 C153.791,515 152,516.791 152,519 L152,543 C152,545.209 153.791,547 156,547 L180,547 C182.209,547 184,545.209 184,543 L184,519 C184,516.791 182.209,515 180,515 L180,515 Z" id="save-floppy" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
-               <p>Save</p>
-          </a>
-        </li>
-        
-        <li id="open" (click)="openBtn()"> 
-          <a>
-            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2H8.55848C9.84977 2 10.9962 2.82629 11.4045 4.05132L11.7208 5H20C21.1046 5 22 5.89543 22 7V9.00961C23.1475 9.12163 23.9808 10.196 23.7695 11.3578L22.1332 20.3578C21.9603 21.3087 21.132 22 20.1654 22H3C1.89543 22 1 21.1046 1 20V5ZM20 9V7H11.7208C10.8599 7 10.0956 6.44914 9.82339 5.63246L9.50716 4.68377C9.37105 4.27543 8.98891 4 8.55848 4H4C3.44772 4 3 4.44772 3 5V12.2709L3.35429 10.588C3.54913 9.66249 4.36562 9 5.31139 9H20ZM3.36634 20C3.41777 19.9109 3.4562 19.8122 3.47855 19.706L5.31139 11L21 11H21.8018L20.1654 20L3.36634 20Z" fill="currentColor"></path> </g></svg>               
-            <p>Open</p>
-          </a>
-        </li>
-        
-        <li id="add">
-          <a [routerLink]="['/editor']">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g id="add-square"> <g> <rect data-name="--Rectangle" fill="none" height="20" id="_--Rectangle" rx="2" ry="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" x="2" y="2"></rect> <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="15.5" x2="8.5" y1="12" y2="12"></line> <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="12" x2="12" y1="15.5" y2="8.5"></line> </g> </g> </g> </g></svg>                
-              <p>New</p>
-        </a>
-        </li>
-        
-        <li id="download" (click)="downloadBtn()">
-          <a>
-            <svg viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>download [#1453]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-339.000000, -480.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M297.92575,332.227 L294.9427,334.913 C294.13315,335.641 292.86685,335.641 292.0573,334.913 L289.07425,332.227 C288.65215,331.848 288.6343,331.215 289.03225,330.813 L289.03225,330.813 C289.4302,330.412 290.09485,330.394 290.51695,330.773 L291.5638,331.716 C291.89875,332.018 292.45,331.792 292.45,331.353 L292.45,326 C292.45,325.448 292.9204,325 293.5,325 C294.0796,325 294.55,325.448 294.55,326 L294.55,331.353 C294.55,331.792 295.10125,332.018 295.43515,331.716 L296.48305,330.773 C296.9041,330.394 297.56875,330.412 297.96775,330.813 L297.96775,330.813 C298.3657,331.215 298.3468,331.848 297.92575,332.227 M300.85,338 L286.15,338 C285.5704,338 285.1,337.553 285.1,337 L285.1,323 C285.1,322.448 285.5704,322 286.15,322 L300.85,322 C301.4296,322 301.9,322.448 301.9,323 L301.9,337 C301.9,337.553 301.4296,338 300.85,338 M283,322 L283,338 C283,339.105 283.93975,340 285.1,340 L301.9,340 C303.0592,340 304,339.105 304,338 L304,322 C304,320.896 303.0592,320 301.9,320 L285.1,320 C283.93975,320 283,320.896 283,322" id="download-[#1453]"> </path> </g> </g> </g> </g></svg> 
-              <p>Download</p>
-          </a>
-        </li>
-        
-        <li id="upload" (click)="uploadBtn()">
-          <a>
-            <svg viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>download [#1453]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-339.000000, -480.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M297.92575,332.227 L294.9427,334.913 C294.13315,335.641 292.86685,335.641 292.0573,334.913 L289.07425,332.227 C288.65215,331.848 288.6343,331.215 289.03225,330.813 L289.03225,330.813 C289.4302,330.412 290.09485,330.394 290.51695,330.773 L291.5638,331.716 C291.89875,332.018 292.45,331.792 292.45,331.353 L292.45,326 C292.45,325.448 292.9204,325 293.5,325 C294.0796,325 294.55,325.448 294.55,326 L294.55,331.353 C294.55,331.792 295.10125,332.018 295.43515,331.716 L296.48305,330.773 C296.9041,330.394 297.56875,330.412 297.96775,330.813 L297.96775,330.813 C298.3657,331.215 298.3468,331.848 297.92575,332.227 M300.85,338 L286.15,338 C285.5704,338 285.1,337.553 285.1,337 L285.1,323 C285.1,322.448 285.5704,322 286.15,322 L300.85,322 C301.4296,322 301.9,322.448 301.9,323 L301.9,337 C301.9,337.553 301.4296,338 300.85,338 M283,322 L283,338 C283,339.105 283.93975,340 285.1,340 L301.9,340 C303.0592,340 304,339.105 304,338 L304,322 C304,320.896 303.0592,320 301.9,320 L285.1,320 C283.93975,320 283,320.896 283,322" id="download-[#1453]"> </path> </g> </g> </g> </g></svg>
-              <p>Upload</p>
-          </a>
-        </li>
-        
-        <li id="share" (click)="shareBtn()">
-          <a>
-            <svg viewBox="-1 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>share</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-314.000000, -728.000000)" fill="currentColor"> <path d="M333,744 C331.23,744 329.685,744.925 328.796,746.312 L323.441,743.252 C323.787,742.572 324,741.814 324,741 C324,740.497 323.903,740.021 323.765,739.563 L329.336,736.38 C330.249,737.37 331.547,738 333,738 C335.762,738 338,735.762 338,733 C338,730.238 335.762,728 333,728 C330.238,728 328,730.238 328,733 C328,733.503 328.097,733.979 328.235,734.438 L322.664,737.62 C321.751,736.631 320.453,736 319,736 C316.238,736 314,738.238 314,741 C314,743.762 316.238,746 319,746 C320.14,746 321.179,745.604 322.02,744.962 L328.055,748.46 C328.035,748.64 328,748.814 328,749 C328,751.762 330.238,754 333,754 C335.762,754 338,751.762 338,749 C338,746.238 335.762,744 333,744" id="share" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
-              <p>Share</p>
-          </a>
-        </li>
+<mat-toolbar>
 
-            <li id="home">
-              <a routerLink="">
-               <svg viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M981.4 502.3c-9.1 0-18.3-2.9-26-8.9L539 171.7c-15.3-11.8-36.7-11.8-52 0L70.7 493.4c-18.6 14.4-45.4 10.9-59.7-7.7-14.4-18.6-11-45.4 7.7-59.7L435 104.3c46-35.5 110.2-35.5 156.1 0L1007.5 426c18.6 14.4 22 41.1 7.7 59.7-8.5 10.9-21.1 16.6-33.8 16.6z" fill="currentColor"></path><path d="M810.4 981.3H215.7c-70.8 0-128.4-57.6-128.4-128.4V534.2c0-23.5 19.1-42.6 42.6-42.6s42.6 19.1 42.6 42.6v318.7c0 23.8 19.4 43.2 43.2 43.2h594.8c23.8 0 43.2-19.4 43.2-43.2V534.2c0-23.5 19.1-42.6 42.6-42.6s42.6 19.1 42.6 42.6v318.7c-0.1 70.8-57.7 128.4-128.5 128.4z" fill="currentColor"></path></g></svg>
-                <p>Home</p>
-              </a>
-            </li>
-            <li id="collab">
-              <a href="#">
-               <svg fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>network</title> <path d="M27 21.75c-0.795 0.004-1.538 0.229-2.169 0.616l0.018-0.010-2.694-2.449c0.724-1.105 1.154-2.459 1.154-3.913 0-1.572-0.503-3.027-1.358-4.212l0.015 0.021 3.062-3.062c0.57 0.316 1.249 0.503 1.971 0.508h0.002c2.347 0 4.25-1.903 4.25-4.25s-1.903-4.25-4.25-4.25c-2.347 0-4.25 1.903-4.25 4.25v0c0.005 0.724 0.193 1.403 0.519 1.995l-0.011-0.022-3.062 3.062c-1.147-0.84-2.587-1.344-4.144-1.344-0.868 0-1.699 0.157-2.467 0.443l0.049-0.016-0.644-1.17c0.726-0.757 1.173-1.787 1.173-2.921 0-2.332-1.891-4.223-4.223-4.223s-4.223 1.891-4.223 4.223c0 2.332 1.891 4.223 4.223 4.223 0.306 0 0.605-0.033 0.893-0.095l-0.028 0.005 0.642 1.166c-1.685 1.315-2.758 3.345-2.758 5.627 0 0.605 0.076 1.193 0.218 1.754l-0.011-0.049-0.667 0.283c-0.78-0.904-1.927-1.474-3.207-1.474-2.334 0-4.226 1.892-4.226 4.226s1.892 4.226 4.226 4.226c2.334 0 4.226-1.892 4.226-4.226 0-0.008-0-0.017-0-0.025v0.001c-0.008-0.159-0.023-0.307-0.046-0.451l0.003 0.024 0.667-0.283c1.303 2.026 3.547 3.349 6.1 3.349 1.703 0 3.268-0.589 4.503-1.574l-0.015 0.011 2.702 2.455c-0.258 0.526-0.41 1.144-0.414 1.797v0.001c0 2.347 1.903 4.25 4.25 4.25s4.25-1.903 4.25-4.25c0-2.347-1.903-4.25-4.25-4.25v0zM8.19 5c0-0.966 0.784-1.75 1.75-1.75s1.75 0.784 1.75 1.75c0 0.966-0.784 1.75-1.75 1.75v0c-0.966-0.001-1.749-0.784-1.75-1.75v-0zM5 22.42c-0.966-0.001-1.748-0.783-1.748-1.749s0.783-1.749 1.749-1.749c0.966 0 1.748 0.782 1.749 1.748v0c-0.001 0.966-0.784 1.749-1.75 1.75h-0zM27 3.25c0.966 0 1.75 0.784 1.75 1.75s-0.784 1.75-1.75 1.75c-0.966 0-1.75-0.784-1.75-1.75v0c0.001-0.966 0.784-1.749 1.75-1.75h0zM11.19 16c0-0.001 0-0.002 0-0.003 0-2.655 2.152-4.807 4.807-4.807 1.328 0 2.53 0.539 3.4 1.409l0.001 0.001 0.001 0.001c0.87 0.87 1.407 2.072 1.407 3.399 0 2.656-2.153 4.808-4.808 4.808s-4.808-2.153-4.808-4.808c0-0 0-0 0-0v0zM27 27.75c-0.966 0-1.75-0.784-1.75-1.75s0.784-1.75 1.75-1.75c0.966 0 1.75 0.784 1.75 1.75v0c-0.001 0.966-0.784 1.749-1.75 1.75h-0z"></path> </g></svg>
-                <p>Clollaborate</p>
-              </a>
-            </li>
-            <li id="account">
-              <a href="#">
-                <svg viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;stroke:currentColor;stroke-miterlimit:10;stroke-width:1.91px;}</style></defs><circle class="cls-1" cx="12" cy="7.25" r="5.73"></circle><path class="cls-1" d="M1.5,23.48l.37-2.05A10.3,10.3,0,0,1,12,13h0a10.3,10.3,0,0,1,10.13,8.45l.37,2.05"></path></g></svg>                <p id="login-status">Login</p>
-              </a>
-            </li>
-            <li id="ctheme" (click)="changeTheme()">
-              <a>
-                <svg fill="currentColor"version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 491.52 491.52" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M491.52,61.435c0-11.311-9.169-20.48-20.48-20.48H327.68v-20.47c0-11.311-9.169-20.48-20.48-20.48H184.32 c-11.311,0-20.48,9.169-20.48,20.48v20.47H20.48C9.169,40.955,0,50.124,0,61.435v245.76c0,0.002,0,0.003,0,0.005s0,0.003,0,0.005 v81.92c0,11.311,9.169,20.48,20.48,20.48h175.827l-46.948,46.948c-7.998,7.998-7.998,20.965,0,28.963 c7.998,7.998,20.965,7.998,28.963,0l67.438-67.438l67.438,67.438c7.998,7.998,20.965,7.998,28.963,0 c7.998-7.998,7.998-20.965,0-28.963l-46.948-46.948H471.04c11.311,0,20.48-9.169,20.48-20.48v-81.92c0-0.002,0-0.003,0-0.005 s0-0.003,0-0.005V61.435z M90.403,286.715l93.917-93.917l67.438,67.438c7.998,7.998,20.965,7.998,28.963,0l46.958-46.958 l73.437,73.437H90.403z M204.8,40.965h81.92v20.47v20.48H204.8v-20.48V40.965z M163.84,81.915v20.48v0.01 c0,11.311,9.169,20.48,20.48,20.48H307.2c11.311,0,20.48-9.169,20.48-20.48v-0.01v-20.48h122.88v196.317L342.162,169.833 c-7.998-7.998-20.965-7.998-28.963,0l-46.958,46.958l-67.438-67.438c-7.998-7.998-20.965-7.998-28.963,0L40.96,278.232V81.915 H163.84z M450.56,368.645H245.975c-0.143-0.001-0.286-0.001-0.429,0H40.96v-40.96h409.6V368.645z"></path> </g> </g> </g></svg>
-               <p>Change Theme</p>
-              </a>
-            </li>
-            <li id="help" (click)="helpBtn()">
-              <a>
-                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 10C10 10.5523 10.4477 11 11 11V17C10.4477 17 10 17.4477 10 18C10 18.5523 10.4477 19 11 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 13.5523 17 13 17V9H11C10.4477 9 10 9.44772 10 10Z" fill="currentColor"></path> <path d="M12 8C12.8284 8 13.5 7.32843 13.5 6.5C13.5 5.67157 12.8284 5 12 5C11.1716 5 10.5 5.67157 10.5 6.5C10.5 7.32843 11.1716 8 12 8Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M23 4C23 2.34315 21.6569 1 20 1H4C2.34315 1 1 2.34315 1 4V20C1 21.6569 2.34315 23 4 23H20C21.6569 23 23 21.6569 23 20V4ZM21 4C21 3.44772 20.5523 3 20 3H4C3.44772 3 3 3.44772 3 4V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V4Z" fill="currentColor"></path> </g></svg>                  
-                <p>Help</p>
-              </a>
-            </li>
-            <h1 class="menu-notes">CollabNotez</h1>
-            
-          </ul>
-        </div>
-      </label>
+        <button mat-button (click)="saveBtn()" matTooltip="Save file">
+          <mat-icon>save</mat-icon>
+          <p>Save</p>
+        </button>
+        <button mat-button (click)="openBtn()" matTooltip="Open a file from saved files">
+          <mat-icon>folder</mat-icon>
+          <p>Open</p>
+        </button>
+        <button mat-button [routerLink]="['/editor']" matTooltip="Create a new File">
+          <mat-icon>add_box</mat-icon>
+          <p>Add New</p>
+        </button>
+        <button mat-button (click)="downloadBtn()" matTooltip="Download File to Computer">
+          <mat-icon>cloud_download</mat-icon>
+          <p>Download</p>
+        </button>
+        <button mat-button (click)="uploadBtn()" matTooltip="Upload File from Computer">
+          <mat-icon>cloud_upload</mat-icon>
+          <p>Upload</p></button>
+        <button mat-button (click)="shareBtn()" matTooltip="Share link with others">
+          <mat-icon>share</mat-icon>
+          <p>Share</p>
+        </button>
+        <button mat-button matTooltip="Collaborate with other Users on this file">
+          <mat-icon>groups</mat-icon>
+          <p>Clollaborate</p>
+        </button>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu" matTooltip="Menu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+      </button>
+      <button mat-menu-item (click)="changeTheme()">
+        <mat-icon>contrast</mat-icon>
+        <span>Change Theme</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>account_circle</mat-icon>
+        <span>Account</span>
+      </button>
+      <button mat-menu-item (click)="helpBtn()">
+        <mat-icon>help</mat-icon>
+        <span>Info</span>
+      </button>
+    </mat-menu>
+
+</mat-toolbar>
+
+

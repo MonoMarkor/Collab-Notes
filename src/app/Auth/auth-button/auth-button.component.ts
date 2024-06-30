@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { CurrentUserService } from '../../services/current-user.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-auth-button',
@@ -12,5 +12,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './auth-button.component.css',
 })
 export class AuthButtonComponent {
-  constructor(public cuService: CurrentUserService) {}
+  constructor(public cuService: UsersService) {}
 }

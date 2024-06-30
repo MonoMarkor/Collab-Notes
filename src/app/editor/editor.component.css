@@ -15,7 +15,7 @@ body {
 .main {
   height: 100%;
   margin-right: 20px;
-  margin-left: 210px;
+  margin-left: 20px;
   margin-top: 0px;
   margin-bottom: 0px;
   padding-bottom: 0px;
@@ -23,13 +23,13 @@ body {
   overflow: -moz-hidden-unscrollable;
 }
 .footer{
-  margin-left: 200px;
+  margin-left: 0px;
   margin-right: 0px;
   border-radius: 10px;
 }
 @media screen and (max-width: 1000px) , (max-aspect-ratio: 16/9) {
   .main{
-    margin-left: 100px;
+    margin-left: 20px;
     transition: 0.1s ease-out;
   }
 }

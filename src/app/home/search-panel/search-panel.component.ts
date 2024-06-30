@@ -6,7 +6,7 @@ import { HomeFilesComponent } from './home-files/home-files.component';
 //import { RouterModule, RouterOutlet } from '@angular/router';
 import { SortByDatePipe } from '../home-panel/home-pipes/sort-by-date.pipe';
 import { RouterModule } from '@angular/router';
-import { CurrentUserService } from '../../services/current-user.service';
+import { UsersService } from '../../services/users.service';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class SearchPanelComponent {
   filesservice: FilesService = inject(FilesService);
   filteredFilesList: Files[] = [];
 
-  constructor(currentuser:CurrentUserService) {
+  constructor(currentuser:UsersService) {
     this.files1 = this.filesservice.getAllFiles();
     this.filteredFilesList = this.files1;
     console.log("Username: " + currentuser.currentUser.username)

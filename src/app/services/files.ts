@@ -1,7 +1,6 @@
 export interface Files {
-    id:number;
+    serverid:string | null;
     fileTitle:string;
     fileBody: string;
     updatedAt: Date;
-    shared:boolean;
 }

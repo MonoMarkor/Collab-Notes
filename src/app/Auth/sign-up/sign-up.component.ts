@@ -21,7 +21,6 @@ import { passwordValidator } from '../passwordStrength.directive';
 import { userPresent } from '../usercheck.directive';
 import { UsersService } from '../../services/users.service';
 import { passwordsMatch } from '../passwordMatch.directive';
-import { CurrentUserService } from '../../services/current-user.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -44,7 +43,7 @@ import { RouterModule } from '@angular/router';
 })
 export class SignUpComponent {
   userService = inject(UsersService);
-  currentuserService = inject(CurrentUserService);
+  currentuserService = inject(UsersService);
 
   createForm = new FormGroup(
     {

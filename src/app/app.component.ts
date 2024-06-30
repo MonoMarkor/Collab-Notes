@@ -5,7 +5,6 @@ import { HomeComponent } from './home/home.component';
 import { ThemeService } from './services/theme.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UsersService } from './services/users.service';
-import { CurrentUserService } from './services/current-user.service';
 //import { BrowserModule } from '@angular/platform-browser';// error when using it with commonmudule
 
 @Component({
@@ -20,7 +19,7 @@ export class AppComponent implements OnInit {
 
 
 
-  constructor(public themeService: ThemeService, public userService: CurrentUserService) {
+  constructor(public themeService: ThemeService, private userService: UsersService) {
     console.log(
       window.matchMedia(
         'check if system is darkmode' + '(prefers-color-scheme: dark)'

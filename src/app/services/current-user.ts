@@ -1,5 +1,5 @@
 export interface CurrentUser {
-    username:string,
-    group:string[],
-    filesID:number[]
+  username: string;
+  local_file_ids: string[];
+  group_ids: string[];
 }

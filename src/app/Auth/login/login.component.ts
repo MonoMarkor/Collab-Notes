@@ -9,11 +9,8 @@ import {
   MatAutocompleteModule,
   MatOption,
 } from '@angular/material/autocomplete';
-import { passwordValidator } from '../passwordStrength.directive';
-import { userPresent } from '../usercheck.directive';
 import { UsersService } from '../../services/users.service';
-import { CurrentUserService } from '../../services/current-user.service';
-import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 
 
@@ -51,7 +48,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
 
   userService = inject(UsersService);
-  currentuserService = inject(CurrentUserService);
+  currentuserService = inject(UsersService);
 
   loginForm = new FormGroup({
     username: new FormControl('', {

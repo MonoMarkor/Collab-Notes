@@ -19,7 +19,7 @@ import { OpenComponent } from './slide/open/open.component';
 import { ShareComponent } from './slide/share/share.component';
 import { InfoComponent } from './slide/info/info.component';
 import { switchMap,Observable } from 'rxjs';
-import { LocalFilesService } from '../services/local-files.service';
+import { TreetableComponent } from './treetable/treetable.component';
 
 @Component({
   selector: 'app-editor',
@@ -30,6 +30,7 @@ import { LocalFilesService } from '../services/local-files.service';
     CommonModule,
     ShareComponent,
     InfoComponent,
+    TreetableComponent
   ],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.css',
@@ -40,12 +41,12 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   fileservice = inject(FilesService);
 
   currentFile: Files | undefined;
+  
   newFile: Files = {
-    id: this.generateId(),
+    serverid: this.generateId(),
     fileTitle: '',
     fileBody: '',
     updatedAt: new Date(),
-    shared: false,
   };
   headerElement!: HTMLInputElement;
   contentElement!: HTMLTextAreaElement;
@@ -57,12 +58,13 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit(): void {
     console.log('ngonit');
     this.route.params.subscribe((params) => {
-      if (params['id'] == null) {
+      if (!params['id'] == null) {
         this.currentFile = this.newFile;
         console.log('newfile');
       } else {
-        const fileLocationId = Number(params['id']);
-        this.currentFile = this.fileservice.getFilesById(fileLocationId);
+        console.log("routing parameter present!")
+        const fileLocationId:string = (params['id']);
+        this.currentFile = this.fileservice.getsServerFilesById(fileLocationId);
         this.updateContent();
         //this.navigateToEditor(fileLocationId);
       }
@@ -132,11 +134,11 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     /*if (this.activity == false) {
       this.fileservice.deleteFileById(this.newFile.id);
     }*/
-    console.log('closing new file: ' + this.newFile.id);
+    console.log('closing new file: ' + this.newFile.serverid);
   }
 
-  generateId(): number {
-    const value = Math.trunc(Math.random() * 10000);
+  generateId(): string {
+    const value = (Math.trunc(Math.random() * 10000)).toString();
     if (this.fileservice.checkIdIfPresent(value)) {
       return this.generateId();
     } else {
@@ -166,7 +168,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     this.contentElement.value = '';
   }
 
-  navigateToEditor(id: number) {
+  navigateToEditor(id: string) {
     this.router.navigate(['/editor', id]);
   }
 
@@ -182,13 +184,13 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
       this.currentFile.fileBody = this.contentElement.value;
       this.currentFile.updatedAt = new Date();
       //console.log(this.currentFile)
-      if (this.fileservice.checkIdIfPresent(this.currentFile.id)) {
+      if (this.fileservice.checkIdIfPresent(this.currentFile.serverid!)) {
         this.fileservice.updateFile(this.currentFile);
         console.log('file updated');
       } else {
         try {
           this.fileservice.pushFile(this.currentFile);
-          this.navigateToEditor(this.currentFile.id);
+          this.navigateToEditor(this.currentFile.serverid!);
         } catch (error) {
           console.error('Error saving file:', error);
           // Ignoring the error and continuing
@@ -199,6 +201,8 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+
+  //download and upload-------------------------------
   onDownload(): void {
     if (this.headerElement.value === '' || this.contentElement.value === '') {
       window.alert('Please enter File name and content');
@@ -247,6 +251,8 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     fileInput.click();
   }
+
+  //popus-------------------------------------
 
   activity: boolean = false;
   activityTrue(): void {
