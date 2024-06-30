@@ -16,7 +16,7 @@ import { CurrentUserService } from './services/current-user.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title = 'Notez';
+  title = 'Collab notes';
 
 
 
