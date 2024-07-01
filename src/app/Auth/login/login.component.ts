@@ -11,6 +11,7 @@ import {
 } from '@angular/material/autocomplete';
 import { UsersService } from '../../services/users.service';
 import { Router, RouterModule } from '@angular/router';
+import { HeaderComponent } from '../../header/header.component';
 
 
 
@@ -27,7 +28,8 @@ import { Router, RouterModule } from '@angular/router';
     MatAutocomplete,
     MatOption,
     MatAutocompleteModule,
-    RouterModule
+    RouterModule,
+    HeaderComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -48,7 +50,6 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
 
   userService = inject(UsersService);
-  currentuserService = inject(UsersService);
 
   loginForm = new FormGroup({
     username: new FormControl('', {
@@ -75,7 +76,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
         this.username.value,
         this.password.value))
     {
-      this.currentuserService.userLogin(this.username.value);
+      this.userService.userLogin(this.username.value);
       alert('logged in as: ' + this.username.value);
       this.loginForm.reset();
       this.navigateToHome();

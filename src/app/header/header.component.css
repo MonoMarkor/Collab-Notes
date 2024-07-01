@@ -22,5 +22,13 @@ mat-toolbar {
     color: var(--nav);
   }
 
+  .home-link {
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .home-link:hover {
+    text-decoration: none;
+  }
 
 }

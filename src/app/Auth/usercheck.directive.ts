@@ -25,9 +25,9 @@ import { Injectable } from '@angular/core';
     );
   }
 }*/
-
+/*
 export function userPresent(userService:UsersService): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
+   /return (control: AbstractControl): ValidationErrors | null => {
         const isPresent = userService.isUsernameTaken(control.value);
         return !isPresent ? null : { userNotAvailable: true };
     };

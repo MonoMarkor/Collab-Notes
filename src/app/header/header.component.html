@@ -1,12 +1,12 @@
 <mat-toolbar>
 
-    <span>Collaborative Notes</span>
+    <span [routerLink]="['/home']" class="home-link">Collaborative Notes</span>
 
    
 
     <div class="control">
 
-        <button a [routerLink]="['/editor']" mat-icon-button class="add" >
+        <button a [routerLink]="['/editor/']" mat-icon-button class="add" >
             <mat-icon>add</mat-icon>
         </button>
 

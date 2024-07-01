@@ -58,12 +58,14 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit(): void {
     console.log('ngonit');
     this.route.params.subscribe((params) => {
-      if (!params['id'] == null) {
+      if (!params['id']) {
         this.currentFile = this.newFile;
+        this.updateContent();
         console.log('newfile');
       } else {
         console.log("routing parameter present!")
         const fileLocationId:string = (params['id']);
+        //this.navigateToEditor(fileLocationId);
         this.currentFile = this.fileservice.getsServerFilesById(fileLocationId);
         this.updateContent();
         //this.navigateToEditor(fileLocationId);
@@ -124,6 +126,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     ) as HTMLTextAreaElement;
     console.log('ng afterviewint:');
     console.log(this.currentFile);
+    //this.updateContent()
   }
 
   ngOnChanges(changes: SimpleChanges): void {

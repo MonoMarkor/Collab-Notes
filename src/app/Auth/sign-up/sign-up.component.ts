@@ -18,10 +18,19 @@ import {
   MatOption,
 } from '@angular/material/autocomplete';
 import { passwordValidator } from '../passwordStrength.directive';
-import { userPresent } from '../usercheck.directive';
+//import { userPresent } from '../usercheck.directive';
 import { UsersService } from '../../services/users.service';
 import { passwordsMatch } from '../passwordMatch.directive';
 import { RouterModule } from '@angular/router';
+import { HeaderComponent } from '../../header/header.component';
+import {
+  MatSnackBar,
+  MatSnackBarAction,
+  MatSnackBarActions,
+  MatSnackBarLabel,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sign-up',
@@ -36,12 +45,21 @@ import { RouterModule } from '@angular/router';
     MatAutocomplete,
     MatOption,
     MatAutocompleteModule,
-    RouterModule
+    RouterModule,
+    HeaderComponent,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent {
+  constructor(private _snackBar: MatSnackBar) {}
+
+  openSnackBar() {
+    this._snackBar.openFromComponent(SignUpSnackbarComponent, {
+      duration: 2000,
+    });
+  }
+
   userService = inject(UsersService);
   currentuserService = inject(UsersService);
 
@@ -49,7 +67,7 @@ export class SignUpComponent {
     {
       username: new FormControl('', {
         nonNullable: true,
-        validators: [Validators.required, userPresent(this.userService)],
+        validators: [Validators.required],
       }),
       password1: new FormControl('', {
         nonNullable: true,
@@ -64,11 +82,12 @@ export class SignUpComponent {
   );
 
   createAccount(): void {
-    if(!this.userService.isUsernameTaken(this.username.value)){
-      this.userService.addUser(this.username.value,this.password2.value)
-      this.currentuserService.userLogin(this.username.value)
+    if (!this.userService.isUsernameTaken(this.username.value)) {
+      this.userService.addUser(this.username.value, this.password2.value);
+      this.currentuserService.userLogin(this.username.value);
     }
-    alert('logged in');
+    //alert('logged in');
+    this.openSnackBar();
   }
   /*get username() {
     return this.createForm.get('username');
@@ -78,12 +97,35 @@ export class SignUpComponent {
     return this.createForm.get('password1');
   }
 
-
   get username() {
     return this.createForm.controls.username;
   }
   get password2() {
     return this.createForm.controls.password2;
   }
- 
+}
+
+@Component({
+  selector: 'sign-in-snack',
+  templateUrl: 'sign-up-snackbar.html',
+  styles: `
+    :host {
+      display: flex;
+    }
+
+    .snack {
+      color: hotpink;
+    }
+  `,
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatSnackBarLabel,
+    MatSnackBarActions,
+    MatSnackBarAction,
+    MatIcon
+  ],
+})
+export class SignUpSnackbarComponent {
+  snackBarRef = inject(MatSnackBarRef);
 }
