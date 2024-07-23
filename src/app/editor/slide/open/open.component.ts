@@ -1,6 +1,6 @@
 import { Component,inject, } from '@angular/core';
 import { OpenResultsComponent } from './open-results/open-results.component';
-import { Files } from '../../../services/files';
+//import { Files } from '../../../services/files';
 import { FilesService } from '../../../services/files.service';
 import { CommonModule } from '@angular/common';
 import { SortByDatePipe } from '../../../home/home-panel/home-pipes/sort-by-date.pipe';
@@ -16,23 +16,23 @@ import { RouterModule } from '@angular/router';
 })
 export class OpenComponent {
 
-  files1: Files[] = [];
+  /*files1: Files[] = [];
   filesservice: FilesService = inject(FilesService);
   filteredFilesList: Files[] = [];
-
+*/
 
 
   constructor() {
-    this.files1 = this.filesservice.getAllFiles();
-    this.filteredFilesList = this.files1;
+    //this.files1 = this.filesservice.getAllFiles();
+    //this.filteredFilesList = this.files1;
   }
   filterResults(text: string) {
     if (!text) {
-      this.filteredFilesList = this.files1;
+     // this.filteredFilesList = this.files1;
     }
 
-    this.filteredFilesList = this.files1.filter((fileslocation) =>
-      fileslocation?.fileTitle.toLowerCase().includes(text.toLowerCase())
-    );
+    //this.filteredFilesList = this.files1.filter((fileslocation) =>
+    //  fileslocation?.fileTitle.toLowerCase().includes(text.toLowerCase())
+    //);
   }
 }

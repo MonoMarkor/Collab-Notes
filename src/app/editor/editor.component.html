@@ -5,14 +5,16 @@
   <!--<app-nav-editor2></app-nav-editor2>-->
 
       <app-slide 
+        (openFile)="openBottomSheet()"
+        (save)="saveBtn()"
         (downloadFile)="onDownload()"
-        (uploadFile)="uploadFile()"
-        (openFile)="showOpenPanel()"
-        (save)="saveFile()"
-        (share)="showSharePopup()"
-        (help)="showInfoPopup()">
+        (uploadFile)="uploadFile()">
       </app-slide>
 
+      <div class="branchAndFile">
+        <div class="branch">
+          <app-personalBranch></app-personalBranch>
+        </div>
 
         <div class="main">
           <div class="main-container">
@@ -22,40 +24,28 @@
                 class="txtHeader"
                 id="txtHeader"
                 placeholder="Enter title here"
-                (keyup)="activityTrue()"
-                (keyup)="saveFile()"
+                (keyup)="activityTrue();"
+                [(ngModel)]="fileStorageService.activeFile.fileName"
               />
               &nbsp;
             </div>
 
-            <div class="content">
-              <textarea class="txtContent" id="txtContent" (keyup)="activityTrue()"
-              ></textarea>
-            </div>
-            <br><br>
+            <file [id]="id" class="content "></file>
+            <br>
 
+          </div>
         </div>
-
       </div>
+        
 
 <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden />
-<!--<button (click)="uploadFile()">Upload File</button>-->
 
 <div class="overlay" *ngIf="openPanel" (click)="closePopup($event)">
   <app-open (click)="$event.stopPropagation()" ></app-open>
 </div>
   
-<div class="overlay2" *ngIf="isSharePopupVisible" (click)="closeSharePopup()">
-  <app-share (click)="$event.stopPropagation()"
-  (closeShare)="closeSharePopup()"></app-share>
-</div>
 
-<div class="overlay2" *ngIf="isInfoPopupVisible" (click)="closeInfoPopup()">
-  <app-info (click)="$event.stopPropagation()"></app-info>
-</div>
-
-<app-treetable></app-treetable>
       
  
-  </body>
+</body>
 

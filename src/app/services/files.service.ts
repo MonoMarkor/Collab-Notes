@@ -1,121 +1,146 @@
 import { Injectable } from '@angular/core';
-import { Files } from './files';
+//import { Files } from './files';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
+import { File } from '../models/file_model';
+import { Group } from '../models/group_model';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FilesService {
-  constructor() {
+  constructor(private http: HttpClient, public userservice: UsersService) {
     // Load files from localStorage if already saved
-    const storedFiles = localStorage.getItem(this.localStorageKey);
+    /*const storedFiles = localStorage.getItem(this.localStorageKey);
     if (storedFiles) {
       this.localFiles = JSON.parse(storedFiles);
-    }
+    }*/
   }
 
-  files: Files[] = [
-    {
-      serverid: '123',
-      fileTitle: 'Getting Started',
-      fileBody: 'Press Download Button to download text',
-      updatedAt: new Date('2024-01-16'),
-    },
-    {
-      serverid: '246',
-      fileTitle: 'To do',
-      fileBody: 'Learn asynchronous programming with Angular',
-      updatedAt: new Date('2024-02-16'),
-    },
-    {
-      serverid: '346',
-      fileTitle: 'Socket.IO',
-      fileBody: 'Websockets with Socket.IO',
-      updatedAt: new Date('2024-03-16'),
-    },
-    {
-      serverid: '346',
-      fileTitle: 'Node.Js',
-      fileBody: 'Backend....',
-      updatedAt: new Date('2024-04-16'),
-    },
-    {
-      serverid: '546',
-      fileTitle: 'Github',
-      fileBody: 'As a version Control System',
-      updatedAt: new Date('2024-05-16'),
-    },
-    {
-      serverid: '646',
-      fileTitle: 'Services',
-      fileBody: 'Angular services',
-      updatedAt: new Date('2024-02-18'),
-    },
-  ];
-
-  getAllFiles(): Files[] {
-    return this.files;
-  }
-  getsServerFilesById(id: string): Files | undefined {
-    return this.files.find((files) => files.serverid === id);
-  }
-  pushFile(file: Files): void {
-    this.files.push(file);
-  }
-  updateFile(updatedFile: Files): void {
-    const fileIndex = this.files.findIndex(
-      (file) => file.serverid === updatedFile.serverid
-    );
-    if (fileIndex !== -1) {
-      this.files[fileIndex] = { ...updatedFile };
-      console.log(`File with ID ${updatedFile.serverid} updated successfully.`);
-    }
-  }
   generateId(): number {
-    return (Math.random() * 100) % 1;
+    return 1;
   }
   checkIdIfPresent(id: string): boolean {
-    return this.files.some((file) => file.serverid === id);
+    return false;
   }
-  deleteFileById(id: string): void {
-    const fileIndex = this.files.findIndex((file) => file.serverid === id);
-    if (fileIndex !== -1) {
-      this.files.splice(fileIndex, 1);
-      console.log(`File with ID ${id} deleted successfully.`);
-    } else {
-      console.log(`File with ID ${id} not found.`);
-    }
-  }
+  deleteFileById(id: string): void {}
 
   //localfiles implementation---------------------------------------------------------------
 
   private localStorageKey = 'files';
-  localFiles: Files[] = [];
-  userlocalFiles: Files[] = [];
+  private localFiles: File[] = [];
+  UserLocalFiles: File[] = [];
 
   // Function to save files array to localStorage
   saveFilesToLocalStorage(): void {
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.files));
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.localFiles));
   }
-  pushLocalFile(file: Files): void {
-    this.localFiles.push(file);
+
+  getFilesfromLocalStorage(): void {
+    const files = localStorage.getItem(this.localStorageKey);
+    if (files) {
+      this.localFiles = JSON.parse(files);
+    }
   }
-  pushUserLocalFile(file: Files): void {
-    this.userlocalFiles.push(file);
+
+  pushUserLocalFile(file: File): void {
+    this.UserLocalFiles.push(file);
   }
-  //needs better 
-  getuserlocalfiles(local_ids:string[]):void{
+
+  getuserlocalfiles(local_ids: string[]): void {
     for (let i = 0; i < local_ids.length; i++) {
       //console.log(local_ids[i]);
-      if( this.localFiles.some((file) => file.serverid === local_ids[i])){
-        this.userlocalFiles.push(this.getslocalFileById(local_ids[i])!);
+      if (this.localFiles.some((file) => file.localFileId === local_ids[i])) {
+        this.UserLocalFiles.push(this.getslocalFileById(local_ids[i])!);
       }
     }
   }
 
-  getslocalFileById(id: string): Files | undefined {
-    return this.localFiles.find((files) => files.serverid === id);
+  addUserFilestoLocalfiles(): void {
+    for (const userFile of this.UserLocalFiles) {
+      const index = this.localFiles.findIndex(
+        (file) => file.localFileId === userFile.localFileId
+      );
+      if (index !== -1) {
+        // Update existing file
+        this.localFiles[index] = userFile;
+      } else {
+        // Append new file
+        this.localFiles.push(userFile);
+      }
+    }
+    this.saveFilesToLocalStorage();
   }
-  getsUserlocalFileById(id: string): Files | undefined {
-    return this.userlocalFiles.find((files) => files.serverid === id);
+
+  getslocalFileById(id: string): File | undefined {
+    return this.UserLocalFiles.find((file) => file.localFileId === id);
   }
+
+  // Server Implementation -----------------------------------------------------------------------------
+  private api: string = 'http://localhost:8080';
+
+  getFileFromServer(server_file_id: string | null): Observable<File> {
+    return this.http
+      .get<File>(`${this.api}/files/${server_file_id}`)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  createFile(file: File): Observable<File> {
+    const body = {
+      localFileId: file.localFileId,
+      serverFileId: file.serverFileId,
+      fileName: file.fileName,
+      version: file.version,
+      content: file.content,
+      tree: file.tree
+    };
+    return this.http
+      .put<File>(`${this.api}/files`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  updateFileInDB(file: File): Observable<any> {
+    const body = {
+      localFileId: file.localFileId,
+      serverFileId: file.serverFileId,
+      fileName: file.fileName,
+      version: file.version,
+      content: file.content,
+      tree: file.tree
+    };
+    return this.http
+      .post<any>(`${this.api}/files`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  private errorHandler(error: HttpErrorResponse): Observable<any> {
+    console.log('FileService: Http Fehler aufgetreten!');
+    return throwError(() => error);
+  }
+
+  //------  Mono's File Implementation
+  sampleGroups: Group[] = [
+    new Group(
+      '1234',
+      'Group1',
+      ['123'],
+      [
+        '0987',
+        '0',
+        '098598765',
+        '0981',
+        '0987',
+        '0986',
+        '0985',
+        '0981',
+        '0987',
+        '0986',
+        '0985',
+        '0981',
+      ]
+    ),
+    new Group('1235', 'Group2', ['123'], ['9876', '9875']),
+    new Group('1236', 'Group3', ['123'], ['8765']),
+  ];
 }

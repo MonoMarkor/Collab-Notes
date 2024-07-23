@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators, NG_ASYNC_VALIDATORS, FormBuilder } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+  NG_ASYNC_VALIDATORS,
+  FormBuilder,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,8 +20,10 @@ import {
 import { UsersService } from '../../services/users.service';
 import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../header/header.component';
-
-
+import { User } from '../../models/user_model';
+import { FooterComponent } from '../../footer/footer.component';
+import { SignUpSnackbarComponent } from '../sign-up/sign-up.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -29,27 +39,18 @@ import { HeaderComponent } from '../../header/header.component';
     MatOption,
     MatAutocompleteModule,
     RouterModule,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit, AfterViewInit{
-  constructor(private router: Router) {}
-
-  ngAfterViewInit(): void {
-
-  }
-
-  ngOnInit(): void {
-    
-  }
+export class LoginComponent {
+  user = new User('', '', '');
 
   navigateToHome() {
     this.router.navigate(['/home']);
   }
-
-  userService = inject(UsersService);
 
   loginForm = new FormGroup({
     username: new FormControl('', {
@@ -62,6 +63,12 @@ export class LoginComponent implements OnInit, AfterViewInit{
     }),
   });
 
+  constructor(
+    private router: Router, 
+    private userService: UsersService, 
+    private _snackBar: MatSnackBar
+  ) {}
+
   get username() {
     return this.loginForm.controls.username;
   }
@@ -69,20 +76,31 @@ export class LoginComponent implements OnInit, AfterViewInit{
     return this.loginForm.controls.password;
   }
 
+  openSnackBar() {
+    this._snackBar.openFromComponent(SignUpSnackbarComponent, {
+      duration: 5000,
+    });
+  }
+
   userLogin() {
-    //console.log(`${this.username.value}`);
-    if (
-      this.userService.checkCredentials(
-        this.username.value,
-        this.password.value))
-    {
-      this.userService.userLogin(this.username.value);
-      alert('logged in as: ' + this.username.value);
-      this.loginForm.reset();
-      this.navigateToHome();
-    } else {
-        alert('login failed as : ' + this.username.value);
-      }
+    this.userService
+      .verifyUser(this.username.value, this.password.value)
+      .subscribe({
+        next: (user) => {
+          this.user = user;
+          if (this.user.userId) {
+            this.openSnackBar();
+            this.userService.userLogin(this.user);
+            this.router.navigate(['/home']);
+          } else {
+            alert('logged in failed: wrong credencials');
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          alert('logged in failed');
+        },
+      });
   }
 
   login(): void {

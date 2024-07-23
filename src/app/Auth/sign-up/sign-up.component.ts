@@ -21,7 +21,7 @@ import { passwordValidator } from '../passwordStrength.directive';
 //import { userPresent } from '../usercheck.directive';
 import { UsersService } from '../../services/users.service';
 import { passwordsMatch } from '../passwordMatch.directive';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../header/header.component';
 import {
   MatSnackBar,
@@ -31,6 +31,9 @@ import {
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
 import { MatIcon } from '@angular/material/icon';
+import { User } from '../../models/user_model';
+import { FooterComponent } from '../../footer/footer.component';
+
 
 @Component({
   selector: 'app-sign-up',
@@ -47,21 +50,13 @@ import { MatIcon } from '@angular/material/icon';
     MatAutocompleteModule,
     RouterModule,
     HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent {
-  constructor(private _snackBar: MatSnackBar) {}
-
-  openSnackBar() {
-    this._snackBar.openFromComponent(SignUpSnackbarComponent, {
-      duration: 2000,
-    });
-  }
-
-  userService = inject(UsersService);
-  currentuserService = inject(UsersService);
+  user = new User('', '', '');
 
   createForm = new FormGroup(
     {
@@ -81,13 +76,47 @@ export class SignUpComponent {
     { validators: passwordsMatch('password1', 'password2') }
   );
 
+  constructor(
+    private _snackBar: MatSnackBar,
+    private userService: UsersService,
+    private router: Router
+  ) {}
+
+  openSnackBar() {
+    this._snackBar.openFromComponent(SignUpSnackbarComponent, {
+      duration: 5000,
+    });
+  }
+
   createAccount(): void {
-    if (!this.userService.isUsernameTaken(this.username.value)) {
-      this.userService.addUser(this.username.value, this.password2.value);
-      this.currentuserService.userLogin(this.username.value);
-    }
-    //alert('logged in');
-    this.openSnackBar();
+    this.userService.checkUsernameAvailibillty(this.username.value).subscribe({
+      next: (res) => {
+        console.log(res);
+        if (res.username_available) {
+          this.userService
+            .createAccount(this.username.value, this.password2.value)
+            .subscribe({
+              next: (user) => {
+                this.user = user;
+                if (this.user.userId) {
+                  this.openSnackBar();
+                  this.userService.userLogin(this.user);
+                  this.router.navigate(['/home']);
+                } else {
+                  alert('Accout Creation Failed');
+                }
+              },
+              error: (err) => {
+                alert('Accout Creation Failed');
+                console.log(err);
+              },
+            });
+        } else {
+          alert('Username is taken. Try another Username');
+        }
+      },
+    });
+    //    this.openSnackBar();
   }
   /*get username() {
     return this.createForm.get('username');
@@ -123,7 +152,7 @@ export class SignUpComponent {
     MatSnackBarLabel,
     MatSnackBarActions,
     MatSnackBarAction,
-    MatIcon
+    MatIcon,
   ],
 })
 export class SignUpSnackbarComponent {

@@ -30,5 +30,21 @@ mat-toolbar {
   .home-link:hover {
     text-decoration: none;
   }
+  .home-icon{
+     background-color:var(--akzent);
+     color: snow;
+  }
+
+  .add{
+     background-color:var(--akzent);
+     color: snow;
+  }
+
+}
+
+@media screen and (max-aspect-ratio: 14/10)  {
+  .home-text{
+    display: none;
+  }
 
 }

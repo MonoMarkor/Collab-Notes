@@ -1,122 +1,200 @@
 import { Injectable } from '@angular/core';
-import { User } from './user_model';
-import { CurrentUser } from './current-user';
+import { User } from '../models/user_model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, Observable, retry, throwError } from 'rxjs';
+import { Group } from '../models/group_model';
+import { File } from '../models/file_model';
+import { Tree } from '../models/tree_model';
+import { Node } from '../models/node_model';
+import { FileLocation } from './file-storage.service';
 
+export enum fileStorageKeys {
+  username = 'username',
+  user = 'user',
+  localFiles = 'localFiles',
+  personalFiles = 'personalFiles'
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  usersList: User[] = [
-    {
-      user_id: '1',
-      username: 'Angular',
-      password: 'Angular',
-      local_file_ids: [],
-      group_ids: ['A', 'B'],
-    },
-    {
-      user_id: '1',
-      username: 'Backend',
-      password: 'Backend',
-      group_ids: ['A', 'B'],
-      local_file_ids: [],
-    },
-    {
-      user_id: '1',
-      username: 'Client',
-      password: 'Client',
-      group_ids: ['A'],
-      local_file_ids: [],
-    },
-    {
-      user_id: '1',
-      username: 'Dekstop',
-      password: 'Dekstop',
-      group_ids: ['B'],
-      local_file_ids: [],
-    },
-    {
-      user_id: '1',
-      username: 'Express',
-      password: 'Express',
-      group_ids: ['C'],
-      local_file_ids: [],
-    },
-  ];
+  public defaultUser: User = new User('', 'LocalUser@12345#+*%', '',[],[],[]);
+  isLoggedIn: boolean = false;
 
-  checkCredentials(username: string, password: string): boolean {
-    const user = this.usersList.find((user) => user.username === username);
-    if (user) {
-      console.log(user.password === password);
-    } else {
-      console.log('user not found');
-    }
-    return user ? user.password === password : false;
-  }
+  currentUser: User = new User('', '', '');
 
-  addUser(username: string, password: string): void {
-    const newUser: User = {
-      username,
-      password,
-      group_ids: [],
-      local_file_ids: [],
-      user_id: '45',
-    };
-    this.usersList.push(newUser);
-  }
-
-  isUsernameTaken(username: string): boolean {
-    return this.usersList.some((user) => user.username === username);
-  }
-
-
-  //CurrentUser Implementation
-  private localStoragekey: string = 'username';
-  private defaultUser: string = 'LocalUser@12345#+*%';
-   isLoggedIn: boolean = false;
-
-  currentUser: CurrentUser = {
-    username: this.defaultUser,
-    group_ids: [],
-    local_file_ids: [],
-  };
-
-  notLoggedIn(): void {
-    this.currentUser = {
-      username: this.defaultUser,
-      group_ids: [],
-      local_file_ids: [],
-    };
+  getUsername():string{
+    return this.currentUser.username
   }
 
   logout(): void {
-    localStorage.setItem(this.localStoragekey, this.defaultUser);
-    this.notLoggedIn();
     this.isLoggedIn = false;
+    this.currentUser = this.defaultUser;
+    localStorage.setItem(fileStorageKeys.username, this.defaultUser.username);
+    localStorage.setItem(fileStorageKeys.user,JSON.stringify(this.defaultUser));
+    localStorage.setItem(fileStorageKeys.personalFiles, JSON.stringify([]));
   }
 
-  userLogin(username: string): void {
-    if (username == this.defaultUser) {
-      this.currentUser.username = username;
-      this.currentUser.group_ids = [];
+  userLogin(user: User): void {
+    if (user.username == this.defaultUser.username) {
+      this.currentUser.username= this.defaultUser.username ;
+      localStorage.setItem(fileStorageKeys.username, user.username);
       this.isLoggedIn = false;
     } else {
-      this.currentUser.username = username;
-      //add function to add groups to current user
-      //add function to add filesId to current user
+      this.currentUser = user;
+      console.log('userid: ', user.userId);
       this.isLoggedIn = true;
-      localStorage.setItem(this.localStoragekey, username);
+      this.updateUserInLocalStorage();
     }
 
     console.log(
       this.currentUser.username +
         ' has logged in with groups: ' +
-        this.currentUser.group_ids +
+        this.currentUser.groupIds +
         '  ,user logged in: ' +
         this.isLoggedIn
     );
+  }
+
+  updateUserInLocalStorage() {
+    localStorage.setItem(fileStorageKeys.username, this.currentUser.username);
+    localStorage.setItem(fileStorageKeys.user, JSON.stringify(this.currentUser));
+  }
+
+  updateFilesInLocalStorage(files: File[] = [], fileLocation: FileLocation) {
+    if (fileLocation == FileLocation.Local) {
+      localStorage.setItem(fileStorageKeys.localFiles, JSON.stringify(files));
+    } else if(fileLocation == FileLocation.Personal) {
+      localStorage.setItem(fileStorageKeys.personalFiles, JSON.stringify(files));
+    }
+  }
+
+  getFilesFromLocalStrorage(fileLocation: FileLocation): File[] {
+    let fileString: string | null = '';
+    if (fileLocation == FileLocation.Local) {
+      fileString = localStorage.getItem(fileStorageKeys.localFiles);
+    } else if(fileLocation == FileLocation.Personal) {
+      fileString = localStorage.getItem(fileStorageKeys.personalFiles);
+    }
+    
+    let files: File[] = JSON.parse(fileString!);
+    let newFiles: File[] = [];
+    for (let i = 0; i < files.length; i++) {
+      let nodes: Node[] = [];
+      for (let j = 0; j < files[i].tree.nodes.length; j++) {
+        nodes.push(new Node(files[i].tree.nodes[j].char, files[i].tree.nodes[j].siteId, files[i].tree.nodes[j].logicalCount, files[i].tree.nodes[j].position));
+      }
+      let newFile: File = new File('', '', '');
+      newFile.fileName = files[i].fileName;
+      newFile.content = files[i].content;
+      newFile.serverFileId = files[i].serverFileId;
+      newFile.localFileId = files[i].localFileId;
+      newFile.tree = new Tree(files[i].tree.logicalCount, nodes, files[i].tree.maxMembers);
+      newFile.version = files[i].version;
+      newFile.fileName = files[i].fileName;
+      newFiles.push(newFile);
+    }
+    return newFiles;
+  }
+
+  private api: string = 'http://localhost:8080';
+
+  verifyUser(username: string, password: string): Observable<User> {
+    const body = {
+      username: username,
+      password: password,
+    };
+    return this.http
+      .post<User>(`${this.api}/users`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  checkUsernameAvailibillty(username: string): Observable<any> {
+    return this.http
+      .get<User>(`${this.api}/users/available/${username}`)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  createAccount(username: string, password: string): Observable<User> {
+    const body = {
+      username: username,
+      password: password,
+    };
+    return this.http
+      .put<User>(`${this.api}/users`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  getMatchingUsernames(searchTerm: string): Observable<any> {
+    return this.http.get<any>(`${this.api}/users/search/${searchTerm}`).pipe(
+      retry(3),
+      catchError(this.errorHandler)
+    );
+  }
+
+  addToPersonalFileList(
+    server_file_id: string,
+    user_id: string
+  ): Observable<any> {
+    const body = {
+      user_id: user_id,
+      server_file_id: server_file_id,
+    };
+    return this.http
+      .put<any>(`${this.api}/users/serverFiles`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  getGroupFromDB(groupId: string): Observable<Group> {
+    return this.http
+      .get<Group>(`${this.api}/groups/${groupId}`)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  createGroup(group: Group): Observable<Group> {
+    const body = {
+      groupId: group.groupId,
+      groupName: group.groupName,
+      members: group.members,
+      serverFileIds: group.serverFileIds
+    };
+    return this.http
+      .put<Group>(`${this.api}/groups`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  addGroupToUser(userId: string, groupId: string): Observable<any> {
+    const body = {
+      groupId: groupId
+    };
+    return this.http
+      .put<any>(`${this.api}/users/${userId}`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  addMemberToGroup(userId: string, groupId: string): Observable<any> {
+    const body = {
+      userId: userId
+    };
+    return this.http
+      .put<any>(`${this.api}/groups/${groupId}`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  addFileToGroup(fileId: string, groupId: string): Observable<any> {
+    const body = {
+      fileId: fileId
+    };
+    return this.http
+      .put<any>(`${this.api}/groups/${groupId}`, body)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  private errorHandler(error: HttpErrorResponse): Observable<any> {
+    console.log('UserService: Http Fehler aufgetreten!');
+    return throwError(() => error);
   }
 }

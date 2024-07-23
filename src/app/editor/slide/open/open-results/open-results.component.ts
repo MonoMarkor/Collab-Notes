@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Files } from '../../../../services/files';
+//import { Files } from '../../../../services/files';
 import { RouterModule } from '@angular/router';
 import { MaxLenPipe } from '../../../../home/home-panel/home-pipes/max-len.pipe';
 
@@ -12,7 +12,7 @@ import { MaxLenPipe } from '../../../../home/home-panel/home-pipes/max-len.pipe'
   styleUrl: './open-results.component.css',
 })
 export class OpenResultsComponent {
-  @Input() filesLocation!: Files;
+  //@Input() filesLocation!: Files;
 
   constructor() {}
 

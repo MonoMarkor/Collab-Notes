@@ -4,8 +4,8 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginComponent } from './Auth/login/login.component';
 import { SignUpComponent } from './Auth/sign-up/sign-up.component';
-
-
+import { PersonalBranchComponent } from './editor/treetable/personalBranch/personalBranch.component';
+import { ConnectionGuard } from './Auth/guards/connection.guard';
 
 export const routes: Routes = [
   {
@@ -32,11 +32,18 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'Login',
+        /*canActivate: [ConnectionGuard],*/
   },
   {
     path: 'signup',
     component: SignUpComponent,
     title: 'Sign Up',
+        /*canActivate: [ConnectionGuard],*/
+  },
+  {
+    path: 'personalBranch',
+    component: PersonalBranchComponent,
+    title: 'Branch',
   },
   {
     path: '**',
@@ -44,4 +51,3 @@ export const routes: Routes = [
     title: 'No Page Found',
   },
 ];
-

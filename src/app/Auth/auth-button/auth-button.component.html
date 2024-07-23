@@ -1,12 +1,10 @@
-<!--<button routerLink="/login" mat-raised-button
- >Login</button>
- <button mat-raised-button
-  (click)="cuService.logout()"
- >Logout</button>-->
-<button routerLink="/login" mat-raised-button
+
+<a Class="authBtn" routerLink="/login" mat-raised-button
   [hidden]="cuService.isLoggedIn"
- >Login</button>
- <button mat-raised-button
+  style="background-color: var(--akzent);color :snow;"
+ >Login</a>
+ <a Class="authBtn" mat-raised-button
   [hidden]="!cuService.isLoggedIn"
   (click)="cuService.logout()"
- >Logout</button>
+  style="background-color: var(--akzent);color :snow;"
+ >Logout</a>

@@ -1,14 +1,14 @@
 <mat-toolbar>
 
         <button mat-button (click)="saveBtn()" matTooltip="Save file">
-          <mat-icon>save</mat-icon>
-          <p>Save</p>
+          <mat-icon class="icon">save</mat-icon>
+          <p class="label">Save</p>
         </button>
-        <button mat-button (click)="openBtn()" matTooltip="Open a file from saved files">
+        <button class="open" mat-button (click)="openBtn()" matTooltip="Open a file from saved files">
           <mat-icon>folder</mat-icon>
           <p>Open</p>
         </button>
-        <button mat-button [routerLink]="['/editor/']" matTooltip="Create a new File">
+        <button mat-button (click)="resetActiveFile()" [routerLink]="['/editor/']" matTooltip="Create a new File">
           <mat-icon>add_box</mat-icon>
           <p>Add New</p>
         </button>
@@ -23,24 +23,21 @@
           <mat-icon>share</mat-icon>
           <p>Share</p>
         </button>
-        <button mat-button matTooltip="Collaborate with other Users on this file">
-          <mat-icon>groups</mat-icon>
-          <p>Clollaborate</p>
-        </button>
+
 
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu" matTooltip="Menu">
         <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
+    <mat-menu class="vert_menu" #menu="matMenu">
       <button mat-menu-item routerLink="">
-        <mat-icon>home</mat-icon>
+        <mat-icon class="menuicon">home</mat-icon>
         <span>Home</span>
       </button>
       <button mat-menu-item (click)="changeTheme()">
         <mat-icon>contrast</mat-icon>
         <span>Change Theme</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item (click)="manageAccount()">
         <mat-icon>account_circle</mat-icon>
         <span>Account</span>
       </button>

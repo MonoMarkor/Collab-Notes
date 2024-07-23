@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;800&display=swap");
 
+
+
+
 * {
   margin: 0px;
   padding: 0%;
@@ -10,21 +13,23 @@
 :root{
     font-family: Poppins, Arial, Helvetica, sans-serif;
 
+    -ms-overflow-style: none;  
+    scrollbar-width: none;
+
   --akzent:#e84855;
+  --akzento:#e8485562;
   --akzenth:#EE5D5C;  
-  --back:#201a23;
-  --backhover: #2E2532;
-  --text: snow;
-  --menuback: #2c2d2b;
-  --menuhover:  #242423;
-  --menutext:  #e8eddf;
-  --menushadow: rgba(0, 0, 0, 0.5);
-  --button: #242423;
-  --buttonshadow: rgba(207, 219, 213, 0.3);
   
   margin: 0px;
   padding: 0%;
   box-sizing: border-box;
+
+  .mat-bottom-sheet-container {
+    background: #222831 !important;
+      -ms-overflow-style: none; 
+     -ms-overflow-style: none;  
+    scrollbar-width: none;
+  }
 }
 
 .lightmode{
@@ -48,7 +53,7 @@
 }
 .darkmode{
   --back: #393E46;
-  --backhover: #222831;
+  --backhover: #454e58;
   --text: snow;
   --menuback: #001b2e;
   --menuhover:  #153447;
@@ -64,5 +69,11 @@
   --nav:snow;
   --navback:var(--spbackground)
 }
+
+
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Ensure mat-menu styles are applied */
+/* Ensure mat-menu styles are applied */

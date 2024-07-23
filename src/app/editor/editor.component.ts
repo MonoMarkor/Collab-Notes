@@ -10,16 +10,31 @@ import {
   ChangeDetectorRef,
   OnDestroy,
 } from '@angular/core';
-import { SlideComponent } from './slide/slide.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AccountDialog, SlideComponent } from './slide/slide.component';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { CommonModule} from '@angular/common';
 import { FilesService } from '../services/files.service';
-import { Files } from '../services/files';
 import { OpenComponent } from './slide/open/open.component';
-import { ShareComponent } from './slide/share/share.component';
-import { InfoComponent } from './slide/info/info.component';
 import { switchMap,Observable } from 'rxjs';
-import { TreetableComponent } from './treetable/treetable.component';
+import { filter } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
+import { PersonalBranchComponent } from './treetable/personalBranch/personalBranch.component';
+import {
+  MatSlideToggleModule,
+  MatSlideToggleChange,
+} from '@angular/material/slide-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { UsersService } from '../services/users.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FileComponent } from './file/file.component';
+import { File } from '../models/file_model';
+import { FileLocation, FileStorageService } from '../services/file-storage.service';
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-editor',
@@ -28,9 +43,12 @@ import { TreetableComponent } from './treetable/treetable.component';
     SlideComponent,
     OpenComponent,
     CommonModule,
-    ShareComponent,
-    InfoComponent,
-    TreetableComponent
+    FormsModule,
+    PersonalBranchComponent,
+    MatSlideToggleModule,
+    MatButtonToggleModule,
+    AccountDialog,
+    FileComponent
   ],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.css',
@@ -38,83 +56,52 @@ import { TreetableComponent } from './treetable/treetable.component';
 export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   route: ActivatedRoute = inject(ActivatedRoute);
   theme = 'darkmode';
-  fileservice = inject(FilesService);
 
-  currentFile: Files | undefined;
-  
-  newFile: Files = {
-    serverid: this.generateId(),
-    fileTitle: '',
-    fileBody: '',
-    updatedAt: new Date(),
-  };
+  isnewfile: boolean = true;
+  id: string = '';
+
   headerElement!: HTMLInputElement;
   contentElement!: HTMLTextAreaElement;
 
-  constructor(private router: Router, private cdr: ChangeDetectorRef) {
+  isChecked: boolean = false;// for connectiontoggle
+
+  constructor(private router: Router, private cdr: ChangeDetectorRef,
+    private userService: UsersService, private fileService: FilesService, public fileStorageService: FileStorageService,
+    public dialog : MatDialog,
+    private _bottomSheet: MatBottomSheet
+  ) {
     console.log('editor created');
   }
 
   ngOnInit(): void {
     console.log('ngonit');
+    this.isChecked = false; // for connectiontoggle
+    this.router.events//to uncheck connection toggle on reroute
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.isChecked = false; 
+        console.log("rerouted:)")
+      });
+
     this.route.params.subscribe((params) => {
-      if (!params['id']) {
-        this.currentFile = this.newFile;
-        this.updateContent();
-        console.log('newfile');
-      } else {
-        console.log("routing parameter present!")
-        const fileLocationId:string = (params['id']);
-        //this.navigateToEditor(fileLocationId);
-        this.currentFile = this.fileservice.getsServerFilesById(fileLocationId);
-        this.updateContent();
-        //this.navigateToEditor(fileLocationId);
+      if(params['id']) {
+        this.id = params['id'];
+      }
+      console.log('params.id: ', this.id);
+      //if(this.id.length > 23) {
+        this.fileStorageService.activeFile = this.fileStorageService.getFileFromStateStorage(this.id);
+      //}
+      console.log(this.fileStorageService.activeFile);
+      if (!this.fileStorageService.activeFile.fileName && this.id.length == 24) {
+        console.log('params.id2: ', this.id);
+        this.fileStorageService.getFileFromServer(this.id, FileLocation.PersonalOrCollabed).subscribe(
+          file => this.fileStorageService.activeFile = file
+        );
+      }
+      if (this.id) {
+        this.isnewfile = false;
       }
     });
-    /*  if (params['id'] == null) {
-        this.currentFile = this.newFile;
-        console.log('newfile');
-      } else {
-        console.log('param is not null');
-        const fileLocationId = Number(params['id']);
-        if(this.localfileservice.checkIdIfPresent(fileLocationId)){
-          this.localFile = this.localfileservice.getFileById(fileLocationId)
-          console.log('found local');
-          console.log(this.localFile)
-        }
-        if(this.fileservice.checkIdIfPresent(fileLocationId)){
-          this.currentFile = this.fileservice.getFilesById(fileLocationId);
-          console.log('found current');
-        }
-        if(!this.currentFile && this.localFile){
-          this.currentFile=this.localFile;
-          this.updateContent();
-          this.saveFile();
-          console.log('no current');
-
-        }else if(this.currentFile && !this.localFile){
-          this.updateContent();
-          this.localFile=this.currentFile;
-          this.localfileservice.saveFile(this.localFile);
-          console.log('no local');
-        }else if (this.currentFile && this.localFile){
-          if(this.localFile.updatedAt>this.currentFile.updatedAt){
-            this.currentFile = this.localFile;
-            this.updateContent();
-            this.saveFile();
-            console.log('localfile is newer');
-            console.log(this.currentFile)
-          }else{
-            console.log('localfile is older');
-            this.updateContent();
-            this.localFile = this.currentFile;
-            this.localfileservice.saveFile(this.localFile);
-          }
-        }else{
-          console.log('no comparision bw local and current');
-        }*/
-    console.log('ng onint:');
-    console.log(this.currentFile);
   }
 
   ngAfterViewInit(): void {
@@ -125,40 +112,32 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
       'txtContent'
     ) as HTMLTextAreaElement;
     console.log('ng afterviewint:');
-    console.log(this.currentFile);
-    //this.updateContent()
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    
-  }
+  ngOnChanges(changes: SimpleChanges): void {}
 
   ngOnDestroy(): void {
     /*if (this.activity == false) {
       this.fileservice.deleteFileById(this.newFile.id);
     }*/
-    console.log('closing new file: ' + this.newFile.serverid);
+    console.log('closing file');
   }
 
   generateId(): string {
-    const value = (Math.trunc(Math.random() * 10000)).toString();
-    if (this.fileservice.checkIdIfPresent(value)) {
-      return this.generateId();
-    } else {
-      return value;
-    }
+    return 'ok';
   }
 
   updateContent(): void {
+    //make new implementation using ng model
     this.headerElement = document.getElementById(
       'txtHeader'
     ) as HTMLInputElement;
     this.contentElement = document.getElementById(
       'txtContent'
     ) as HTMLTextAreaElement;
-    if (this.currentFile) {
-      this.headerElement.value = this.currentFile.fileTitle;
-      this.contentElement.value = this.currentFile.fileBody;
+    if (true) {
+      this.headerElement.value = 'Hallo';
+      this.contentElement.value = 'Welt';
     } else {
       this.resetValues();
     }
@@ -175,42 +154,76 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     this.router.navigate(['/editor', id]);
   }
 
-  saveFile(): void {
-    this.headerElement = document.getElementById(
-      'txtHeader'
-    ) as HTMLInputElement;
-    this.contentElement = document.getElementById(
-      'txtContent'
-    ) as HTMLTextAreaElement;
-    if (this.currentFile) {
-      this.currentFile.fileTitle = this.headerElement.value;
-      this.currentFile.fileBody = this.contentElement.value;
-      this.currentFile.updatedAt = new Date();
-      //console.log(this.currentFile)
-      if (this.fileservice.checkIdIfPresent(this.currentFile.serverid!)) {
-        this.fileservice.updateFile(this.currentFile);
-        console.log('file updated');
-      } else {
-        try {
-          this.fileservice.pushFile(this.currentFile);
-          this.navigateToEditor(this.currentFile.serverid!);
-        } catch (error) {
-          console.error('Error saving file:', error);
-          // Ignoring the error and continuing
-        }
-        //console.log(this.currentFile);
-        console.log('file pushed');
-      }
+  saveBtn():void{
+    if (this.isnewfile && this.fileStorageService.activeFile.fileName && this.userService.isLoggedIn) {
+      this.addFileToServer(this.fileStorageService.activeFile.fileName);
+    } else if (!this.isnewfile && this.fileStorageService.activeFile.fileName && this.userService.isLoggedIn) {
+      this.fileStorageService.activeFile.fileName = this.fileStorageService.activeFile.fileName;
+      this.updateFileToServer(this.fileStorageService.activeFile);
+    }
+ 
+    if(!this.userService.isLoggedIn){
+      
     }
   }
 
+  addFileToServer(fileName: string) {
+    console.log('editor: addFileToServer()');
+    this.fileStorageService.activeFile.fileName = fileName;
+    this.fileService.createFile(this.fileStorageService.activeFile).subscribe({
+      next: (file) => {
+        if (file.serverFileId) {
+          console.log(this.userService.currentUser.userId);
+          this.userService.addToPersonalFileList(
+            file.serverFileId,
+            this.userService.currentUser.userId
+          ).subscribe({
+            next: () => {
+              this.userService.currentUser.serverFileIds.push(
+                file.serverFileId!
+              );
+              this.userService.updateUserInLocalStorage();
+              this.fileStorageService.activeFile.serverFileId = file.serverFileId;
+              this.fileStorageService.addFile(this.fileStorageService.activeFile, FileLocation.Personal, true);
+              this.router.navigate(['/editor', file.serverFileId]);
+            },
+            error: (err) => {
+              alert('addToPersonalFileList() failed');
+            },
+          });
+        }
+      },
+      error: (err) => {
+        alert('createFile() failed');
+      },
+    });
+  }
+
+  updateFileToServer(file: File) {
+    this.fileService.updateFileInDB(file).subscribe({
+      next: (message) => {
+        if(message.success) {
+          alert('file Updated Succesfully');
+        } else {
+          alert('failed to Update File');
+        }
+      }
+    })
+  }
+
+  saveFile(): void {}
+
+  toggleConnect(event: MatSlideToggleChange): void {
+    console.log(event.checked);
+  }
 
   //download and upload-------------------------------
+  
   onDownload(): void {
-    if (this.headerElement.value === '' || this.contentElement.value === '') {
-      window.alert('Please enter File name and content');
+    if (this.headerElement.value === '') {
+      window.alert('Please enter File name');
     } else {
-      const content = this.contentElement.value;
+      const content = this.fileStorageService.activeFile.content;
       const link = document.createElement('a');
       link.download = this.headerElement.value + '.txt';
 
@@ -234,13 +247,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      this.headerElement = document.getElementById(
-        'txtHeader'
-      ) as HTMLInputElement;
-      this.contentElement = document.getElementById(
-        'txtContent'
-      ) as HTMLTextAreaElement;
-      this.contentElement.value = e.target!.result as string;
+      this.fileStorageService.activeFile.content = e.target!.result as string;
       this.headerElement.value = file.name;
       this.activityTrue();
     };
@@ -262,21 +269,13 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     this.activity = true;
   }
 
-  //For Share Componenet
-  isSharePopupVisible?: boolean;
-  showSharePopup(): void {
-    this.isSharePopupVisible = true;
-    console.log('popup: ' + this.isSharePopupVisible);
-    //this.saveFile();
+  //For Open-Component
+  openBottomSheet(): void {
+    this._bottomSheet.open(MobilefilesSheet, {
+      panelClass: 'custom-bottom-sheet-background',
+    });  
   }
 
-  closeSharePopup(): void {
-    this.isSharePopupVisible = false;
-    if (this.activity) {
-      this.saveFile();
-    }
-  }
-  //For Open-Component
   openPanel: boolean = false;
   showOpenPanel() {
     this.openPanel = !this.openPanel;
@@ -288,12 +287,21 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   closePopup(event: Event): void {
     this.openPanel = false;
   }
-  //for info Component
-  isInfoPopupVisible = false;
-  showInfoPopup(): void {
-    this.isInfoPopupVisible = true;
-  }
-  closeInfoPopup(): void {
-    this.isInfoPopupVisible = false;
+}
+
+@Component({
+  selector: 'mobile-files-sheet',
+  templateUrl: 'mobile-files.html',
+  standalone: true,
+  imports: [MatListModule, PersonalBranchComponent],
+})
+export class MobilefilesSheet {
+  constructor(
+    private _bottomSheetRef: MatBottomSheetRef<MobilefilesSheet>
+  ) {}
+
+  openLink(event: MouseEvent): void {
+    this._bottomSheetRef.dismiss();
+    event.preventDefault();
   }
 }
